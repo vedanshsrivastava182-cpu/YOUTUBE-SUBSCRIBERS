@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Vedansh Mod Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{background:#111;color:white;font-family:Arial;text-align:center;margin:0}
+header{background:#1db954;padding:15px;font-size:22px}
+
+#search{padding:10px;width:80%;border-radius:20px;border:none}
+
+#adminBox{margin-top:10px}
+#adminBox input{padding:8px;border-radius:10px;border:none}
+
+.app{background:#222;margin:10px;padding:10px;border-radius:10px}
+
+#chatbot{
+ position:fixed;
+ bottom:20px;
+ right:20px;
+ width:260px;
+ background:#222;
+ border-radius:10px;
+ padding:10px;
+}
+#chatBody{height:120px;overflow:auto}
+</style>
+</head>
+
+<body>
+
+<header>🔥 Vedansh Mod Store 🔥</header>
+
+<br>
+
+<!-- 🔍 Search -->
+<input id="search" placeholder="Search apps..." oninput="searchApps()">
+
+<!-- 🔐 Admin -->
+<div id="adminBox">
+  <input type="password" id="adminPass" placeholder="Admin password">
+  <button onclick="checkAdmin()">Upload</button>
+</div>
+
+<br>
+
+<div id="apps"></div>
+
+<!-- 🤖 Chatbot -->
+<div id="chatbot">
+  <div>🤖 Vedansh AI</div>
+  <div id="chatBody"></div>
+  <input id="msg" placeholder="Ask about this site...">
+  <button onclick="send()">Send</button>
+</div>
+
+<script>
+
+// 💾 Load
+let apps = JSON.parse(localStorage.getItem("apps")) || [];
+let appsDiv = document.getElementById("apps");
+
+// 🔍 SEARCH FIXED
+function searchApps(){
+  let q = document.getElementById("search").value.toLowerCase().trim();
+
+  if(q === ""){
+    showApps(apps);
+    return;
+  }
+
+  let result = apps.filter(a => 
+    a.name.toLowerCase().includes(q)
+  );
+
+  showApps(result);
+}
+
+// 🔐 Admin
+function checkAdmin(){
+  let pass = document.getElementById("adminPass").value;
+
+  if(pass === "0502"){
+    uploadApp();
+  }else{
+    alert("Wrong password ❌");
+  }
+}
+
+// 📤 Upload
+function uploadApp(){
+  let name = prompt("App Name");
+  let logo = prompt("Logo URL");
+  let features = prompt("Features");
+  let link = prompt("Download Link");
+
+  if(!name || !link){
+    alert("Name aur link required ❌");
+    return;
+  }
+
+  apps.push({name, logo, features, link});
+  localStorage.setItem("apps", JSON.stringify(apps));
+
+  alert("Uploaded 🔥");
+  showApps(apps);
+}
+
+// 📦 SHOW APPS (improved)
+function showApps(data){
+  if(data.length === 0){
+    appsDiv.innerHTML = "<p>No apps found ❌</p>";
+    return;
+  }
+
+  let html = "";
+
+  data.forEach(a=>{
+    html += `
+    <div class="app">
+      <h3>${a.name}</h3>
+      <img src="${a.logo || 'https://via.placeholder.com/80'}" width="80"><br>
+      <p>${a.features || ''}</p>
+      <a href="${a.link}" target="_blank">
+        <button>Download</button>
+      </a>
+    </div>`;
+  });
+
+  appsDiv.innerHTML = html;
+}
+
+// 🤖 Chatbot
+function send(){
+  let msg = document.getElementById("msg").value.toLowerCase();
+  let res = "bura lga, vedansh ne sirf ye web apps  ke mod ke liye bnay hai per isliye mujhe itna modify nhi kiya hai agar koi question hai to ise.vedanshsrivastava182@gmail.com pe bhej do.me har swalo ke javab nhi de sakta lekin kuch basic questions ke javab de sakta hu ex. tum koun ho.ye web kisne banaya.tum koun ho.is web se kya hota hai ,basic questions puch sakte ho 🙂";
+
+  if(msg.includes("tum kaun ho")){
+    res = "Main Vedansh AI hu 🤖";  }
+  else if(msg.includes("ye web kisne banaya")){
+    res = "Ye website Vedansh ne banayi hai 🔥 usne zero se coding statt ki aur aaj ye results aays hai.uska you tube channel bhi hai . Vedansh Srivastava ke nam se.uske channel me web ki link hai jisse aap khud apni web bna sakte ho aur vo sirf 12 sal me ye sab seekh gya";
+  }
+  else if(msg.includes("is web se kya hota hai")){
+    res = "Ye Vedansh Mod Store hai jahan se apps ke mid download kar sakte ho 📱";
+  }
+  else if(msg.includes("download")){
+    res = "App search karo aur download button dabao 👍";
+  }
+
+  document.getElementById("chatBody").innerHTML += "<p>"+res+"</p>";
+}
+
+// 🚀 Start
+showApps(apps);
+
+</script>
+
+</body>
+</html>
